@@ -1,0 +1,20 @@
+[general]
+name=Apply QLR to layers
+qgisMinimumVersion=3.22
+qgisMaximumVersion=4.99
+supportsQt6=True
+description=Adds "Apply QLR file to layers" to the layer group context menu
+about=Right-click a layer group, choose "Apply QLR file to layers", pick a .qlr file, and the styles of all named layers in the QLR are applied to the layers in the group that match by name and geometry type (point/line/polygon). Existing styles are overwritten.
+version=1.0.4
+icon=icon.svg
+author=Lars Nielsen, LIFA Digital and Claude AI
+email=lars.nielsen@lifadigital.dk
+category=Layers
+tags=qlr,style,layer definition,layer tree,group
+
+tracker=https://github.com/lifalin2016/qgis-apply_qlr_to_layers/issues
+repository=https://github.com/lifalin2016/qgis-apply_qlr_to_layers
+homepage=https://www.lifadigital.dk
+
+experimental=False
+deprecated=False
