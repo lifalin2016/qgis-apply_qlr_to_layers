@@ -14,6 +14,7 @@ from .qlr_applier import apply_qlr_to_groups
 MENU_TEXT = "Apply QLR file to layers"
 SETTINGS_FILE = "apply_qlr_to_layers/lastFile"
 SETTINGS_SUBGROUPS = "apply_qlr_to_layers/includeSubgroups"
+SETTINGS_PREVIEW = "apply_qlr_to_layers/applyPreviewExpression"
 ICON_PATH = os.path.join(os.path.dirname(__file__), "icon.svg")
 LOG_TAG = "Apply QLR to layers"
 
@@ -86,6 +87,7 @@ class ApplyQlrToLayersPlugin:
             parent, MENU_TEXT, self.icon,
             settings.value(SETTINGS_FILE, "", type=str),
             settings.value(SETTINGS_SUBGROUPS, True, type=bool),
+            settings.value(SETTINGS_PREVIEW, True, type=bool),
         )
         if not _exec(dlg):
             return
@@ -93,9 +95,11 @@ class ApplyQlrToLayersPlugin:
         include_sub = dlg.include_subgroups()
         settings.setValue(SETTINGS_FILE, path)
         settings.setValue(SETTINGS_SUBGROUPS, include_sub)
+        apply_preview = dlg.apply_preview_expression()
+        settings.setValue(SETTINGS_PREVIEW, apply_preview)
 
         try:
-            result = apply_qlr_to_groups(path, groups, self.iface, include_sub)
+            result = apply_qlr_to_groups(path, groups, self.iface, include_sub, apply_preview)
         except Exception as exc:
             QMessageBox.critical(parent, MENU_TEXT, str(exc))
             return

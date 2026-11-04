@@ -11,3 +11,6 @@ whether layers in subgroups should be included (checkbox, on by default).
 
 Install: copy the folder `apply_qlr_to_layers` into your QGIS profile's `python/plugins`
 directory (or use *Plugins > Manage and Install Plugins > Install from ZIP*), then enable it.
+
+* Optional (on by default): the layer's **preview expression** is copied from the QLR as well.
+  Layers whose QLR entry has no preview expression keep their current one.

@@ -9,7 +9,8 @@ from qgis.PyQt.QtWidgets import (
 class ApplyQlrDialog(QDialog):
     """Pick a QLR file and choose whether subgroups are included."""
 
-    def __init__(self, parent, title, icon, start_path="", include_subgroups=True):
+    def __init__(self, parent, title, icon, start_path="", include_subgroups=True,
+                 apply_preview=True):
         super().__init__(parent)
         self.setWindowTitle(title)
         if icon is not None:
@@ -32,6 +33,13 @@ class ApplyQlrDialog(QDialog):
         self.sub_check.setToolTip(
             "When checked, layers in nested groups below the selected group are styled too.")
         layout.addWidget(self.sub_check)
+
+        self.preview_check = QCheckBox("Apply preview expression (display name)")
+        self.preview_check.setChecked(apply_preview)
+        self.preview_check.setToolTip(
+            "Also copy the layer's preview expression from the QLR file. "
+            "Layers whose QLR entry has no preview expression keep their current one.")
+        layout.addWidget(self.preview_check)
 
         self.buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
@@ -58,6 +66,9 @@ class ApplyQlrDialog(QDialog):
 
     def qlr_path(self):
         return self.path_edit.text().strip()
+
+    def apply_preview_expression(self):
+        return self.preview_check.isChecked()
 
     def include_subgroups(self):
         return self.sub_check.isChecked()

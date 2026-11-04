@@ -80,6 +80,7 @@ def _qlr_geometry_kind(element):
 
 class QlrStyle:
     def __init__(self, name, layer_type, kind, element):
+        self.preview_expression = element.firstChildElement("previewExpression").text().strip()
         self.name = name
         self.layer_type = layer_type
         self.kind = kind
@@ -178,7 +179,8 @@ def _read_style(layer, element, context):
     return bool(res), ""
 
 
-def apply_qlr_to_groups(qlr_path, groups, iface=None, include_subgroups=True):
+def apply_qlr_to_groups(qlr_path, groups, iface=None, include_subgroups=True,
+                        apply_preview_expression=True):
     qlr = QlrFile(qlr_path)
     layers, broken = collect_layers(groups, include_subgroups)
 
@@ -206,6 +208,14 @@ def apply_qlr_to_groups(qlr_path, groups, iface=None, include_subgroups=True):
             continue
 
         used.add(id(style))
+        # The preview (display) expression is applied separately and only when the
+        # QLR defines one, so layers whose QLR entry has none keep their current one.
+        if (apply_preview_expression and style.preview_expression
+                and isinstance(layer, QgsVectorLayer)):
+            try:
+                layer.setDisplayExpression(style.preview_expression)
+            except Exception as exc:
+                result.failed.append((layer.name(), "preview expression: {}".format(exc)))
         layer.triggerRepaint()
         try:
             layer.emitStyleChanged()
